@@ -17,12 +17,12 @@ func main() {
 	var number int
 	number = r1.Intn(10) //generisanje nasumicnog broja u rasponu od 0 do 10
 	//fmt.Println("number is ", number)
-	var quess int
+	var guess int
 	//fmt.Print(number)
 	for life != 0 {
-		fmt.Print("quess a number: ")
-		fmt.Scanln(&quess) //uneta vrednost se prosledjuje quess varijabli
-		if quess == number {
+		fmt.Print("guess a number: ")
+		fmt.Scanln(&guess) //uneta vrednost se prosledjuje quess varijabli
+		if guess == number {
 			fmt.Println("correct")
 			fmt.Print("You won! Exiting app...")
 			time.Sleep(4 * time.Second)
