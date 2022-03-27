@@ -16,7 +16,7 @@ func main() {
 
 	var number int
 	number = r1.Intn(10) //generisanje nasumicnog broja u rasponu od 0 do 10
-	fmt.Println("number is ", number)
+	//fmt.Println("number is ", number)
 	var guess int
 	var game = true
 	for game == true {
