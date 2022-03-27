@@ -18,15 +18,18 @@ func main() {
 	number = r1.Intn(10) //generisanje nasumicnog broja u rasponu od 0 do 10
 	fmt.Println("number is ", number)
 	var guess int
-
-	for life > 0 {
+	var game = true
+	for game == true {
 		fmt.Print("guess a number: ")
 		fmt.Scanln(&guess) // uneta vrednost se prosledjuje quess varijabli
-
+		if life == 0 {
+			game = false
+			break
+		}
 		if guess == number {
 			fmt.Printf("Good job!You won with %v lifes left! \nExiting app...", life)
 			time.Sleep(4 * time.Second)
-			life -= life
+			game = false
 		} else if guess > number {
 			life -= 1
 			fmt.Println("Try lower.")
@@ -37,6 +40,9 @@ func main() {
 
 	}
 	if life == 0 {
-		fmt.Print("No more lifes.Game over")
+		fmt.Println("No more lifes.Game over")
+		fmt.Println("Exiting. . .")
+		time.Sleep(3 * time.Second)
+
 	}
 }
