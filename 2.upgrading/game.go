@@ -29,10 +29,16 @@ func main() {
 			break
 		} else if guess > number {
 			life -= 1
-			fmt.Println("Try lower.")
+			if life != 0 {
+				fmt.Println("Try lower.")
+			}
+			//fmt.Println("Try lower.")
 		} else if guess < number {
 			life -= 1
-			fmt.Println("Try higher.")
+			if life != 0 {
+				fmt.Println("Try higher.")
+			}
+			//fmt.Println("Try higher.")
 		}
 		fmt.Printf("%v lifes left\n", life)
 
