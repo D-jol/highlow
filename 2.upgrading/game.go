@@ -16,7 +16,7 @@ func main() {
 
 	var number int
 	number = r1.Intn(10) //generisanje nasumicnog broja u rasponu od 0 do 10
-	fmt.Println("number is ", number)
+	//fmt.Println("number is ", number) // for testing purposes
 	var guess int
 
 	for {
@@ -40,7 +40,7 @@ func main() {
 			}
 			//fmt.Println("Try higher.")
 		}
-		fmt.Printf("%v lifes left\n", life)
+		fmt.Printf("Life count: %v\n", life)
 
 		if life == 0 {
 			fmt.Println("Game over")
