@@ -25,4 +25,7 @@ func main() {
 	user := user_info_input()
 	fmt.Println(user)
 
+	for range user {
+		fmt.Println(user)
+	}
 }
