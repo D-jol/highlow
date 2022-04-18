@@ -8,24 +8,21 @@ var (
 	user_info string
 )
 
-func user_info_input() string {
+func user_info_input() (user_info string) {
 	var name, surname string
 
-	fmt.Print("name: ")
+	fmt.Print("What's your name: ")
 	fmt.Scanln(&name)
-	fmt.Print("surname: ")
+	fmt.Print("What's your surname: ")
 	fmt.Scanln(&surname)
 
 	user_info = name + " " + surname
 
-	return user_info
+	return
 }
 
 func main() {
 	user := user_info_input()
-	fmt.Println(user)
+	fmt.Println("Hello, ", user, "!")
 
-	for range user {
-		fmt.Println(user)
-	}
 }
