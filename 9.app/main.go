@@ -1,12 +1,41 @@
 package main
 
 import (
+	"context"
+	"database/sql"
 	"fmt"
 
-	_ "github.com/go-sql-driver/mysql"
+	"github.com/go-sql-driver/mysql"
 )
 
 func main() {
+
+	c := mysql.Config{
+		User:      "root",
+		Passwd:    "1234",
+		Addr:      "localhost:3306",
+		Net:       "tcp",
+		DBName:    "phone_book",
+		ParseTime: true,
+	}
+
+	fmt.Println(c.FormatDSN()) // some info
+
+	db, err := sql.Open("mysql", c.FormatDSN())
+	if err != nil {
+		fmt.Println("sql.Open", err)
+		return
+	}
+	defer func() {
+		_ = db.Close()
+		fmt.Println("closed")
+	}()
+
+	if err := db.PingContext(context.Background()); err != nil {
+		fmt.Println("db.PingContext", err)
+		return
+	}
+
 	phone_book := make(map[string]string) //made empty array of contact object - phone book
 
 	var input int = 0
@@ -31,6 +60,11 @@ func main() {
 			fmt.Println("Enter name and phone number: ")
 			fmt.Scanln(&name, &phone)
 			phone_book[name] = phone // for key name assign value of variable phone
+			row := db.QueryRowContext(context.Background(), "INSERT INTO contact (name, phone) VALUES(?, ?)", name, phone)
+			if err := row.Err(); err != nil {
+				fmt.Println("db.QueryRowContext", err)
+				return
+			}
 		case input == 2:
 			i := 1 // index number
 			for key, value := range phone_book {
