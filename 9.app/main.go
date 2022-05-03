@@ -44,6 +44,13 @@ func main() {
 	var phone string
 	var del string // number that is going to be deleted
 
+	const (
+		Add_contact    = 1
+		Remove_contact = 2
+		View_contact   = 3
+		Exit           = 0
+	)
+
 	for running {
 		fmt.Print("Welcome to phone adress book app\n")
 		fmt.Println("[1]- Add contact")
@@ -55,7 +62,7 @@ func main() {
 		switch {
 		case input == 0:
 			running = false // break statement
-		case input == 1:
+		case input == Add_contact:
 			// add contact
 			fmt.Println("Enter name and phone number: ")
 			fmt.Scanln(&name, &phone)
@@ -65,7 +72,7 @@ func main() {
 				fmt.Println("db.QueryRowContext", err)
 				return
 			}
-		case input == 2:
+		case input == Remove_contact:
 			i := 1 // index number
 			for key, value := range phone_book {
 				fmt.Printf("%v. %v: %v\n", i, key, value)
@@ -78,7 +85,7 @@ func main() {
 					delete(phone_book, key) // first argument is the name of the map | the second one is key
 				}
 			}
-		case input == 3:
+		case input == View_contact:
 			if len(phone_book) == 0 {
 				fmt.Println("No contacts")
 				break
