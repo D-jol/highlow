@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"log"
 
 	"github.com/go-sql-driver/mysql"
 )
@@ -90,17 +91,26 @@ func main() {
 				return
 			}
 		case input == VIEW_CONTACT:
-
-			if len(phone_book) == 0 {
-				fmt.Println("No contacts")
-				break
-			} else {
-				i := 1
-				for key, value := range phone_book {
-					fmt.Printf("%v. %v: %v\n", i, key, value)
-					i++
-				}
+			i := 1
+			results, err := db.Query("SELECT * FROM contacts")
+			if err != nil {
+				log.Fatal("Error message: ", err)
 			}
+			for results.Next() {
+				err = results.Scan(&name, &phone)
+				phone_book[name] = phone
+				if err != nil {
+					log.Fatal("error", err)
+				}
+				fmt.Printf("%v. %v: %v\n", i, name, phone)
+				i++
+			}
+			if len(phone_book) == 0 {
+				fmt.Println("Contact list is empty. Add a contact with option 1.")
+				//running = false
+				continue // returns to the welcome page with notice to add contacts :D
+			}
+
 		default:
 			fmt.Println("Invalid input")
 			continue
