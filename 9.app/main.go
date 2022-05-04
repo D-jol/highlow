@@ -15,13 +15,13 @@ func main() {
 		Passwd:    "1234",
 		Addr:      "localhost:3306",
 		Net:       "tcp",
-		DBName:    "phone_book",
+		DBName:    "phone_book", // contacts
 		ParseTime: true,
 	}
 
-	fmt.Println(c.FormatDSN()) // some info
+	fmt.Println(c.FormatDSN()) // db info
 
-	db, err := sql.Open("mysql", c.FormatDSN())
+	db, err := sql.Open("mysql", c.FormatDSN()) //umesto c.formatdns moze se odmah napisati info za bazu ("mysql, user:pass@tcp(127.0.0.1:3306)/db_name")
 	if err != nil {
 		fmt.Println("sql.Open", err)
 		return
@@ -38,17 +38,16 @@ func main() {
 
 	phone_book := make(map[string]string) //made empty array of contact object - phone book
 
-	var input int = 0
 	var running = true
+	var input int = 0
 	var name string
 	var phone string
-	var del string // number that is going to be deleted
 
 	const (
-		Add_contact    = 1
-		Remove_contact = 2
-		View_contact   = 3
-		Exit           = 0
+		ADD_CONTACT    = 1
+		REMOVE_CONTACT = 2
+		VIEW_CONTACT   = 3
+		EXIT           = 0
 	)
 
 	for running {
@@ -60,19 +59,19 @@ func main() {
 
 		fmt.Scanln(&input)
 		switch {
-		case input == 0:
+		case input == EXIT:
 			running = false // break statement
-		case input == Add_contact:
-			// add contact
+		case input == ADD_CONTACT:
 			fmt.Println("Enter name and phone number: ")
 			fmt.Scanln(&name, &phone)
 			phone_book[name] = phone // for key name assign value of variable phone
-			row := db.QueryRowContext(context.Background(), "INSERT INTO contact (name, phone) VALUES(?, ?)", name, phone)
+			row := db.QueryRowContext(context.Background(), "INSERT INTO contacts (name, phone) VALUES(?, ?)", name, phone)
 			if err := row.Err(); err != nil {
 				fmt.Println("db.QueryRowContext", err)
 				return
 			}
-		case input == Remove_contact:
+		case input == REMOVE_CONTACT:
+			var del string
 			i := 1 // index number
 			for key, value := range phone_book {
 				fmt.Printf("%v. %v: %v\n", i, key, value)
@@ -85,7 +84,13 @@ func main() {
 					delete(phone_book, key) // first argument is the name of the map | the second one is key
 				}
 			}
-		case input == View_contact:
+			row := db.QueryRowContext(context.Background(), "DELETE FROM contacts WHERE phone=?", del)
+			if err := row.Err(); err != nil {
+				fmt.Println("db.QueryRowContext", err)
+				return
+			}
+		case input == VIEW_CONTACT:
+
 			if len(phone_book) == 0 {
 				fmt.Println("No contacts")
 				break
