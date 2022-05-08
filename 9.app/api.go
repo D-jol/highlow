@@ -5,11 +5,16 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"net/http"
 
 	"github.com/go-sql-driver/mysql"
 )
 
-func main() {
+func PhoneBook(w http.ResponseWriter, req *http.Request) {
+
+	w.Header().Set("Content-Type", "text/html")
+
+	w.Write([]byte("<h1 color=blue>PhoneBook</h1"))
 
 	c := mysql.Config{
 		User:      "root",
@@ -106,7 +111,6 @@ func main() {
 			}
 			if len(phone_book) == 0 {
 				fmt.Println("Contact list is empty. Add a contact with option 1.")
-				//running = false
 				continue // returns to the welcome page with notice to add contacts :D
 			}
 
@@ -115,4 +119,10 @@ func main() {
 			continue
 		}
 	}
+}
+
+func main() {
+	http.HandleFunc("/phone", PhoneBook)
+
+	log.Fatal(http.ListenAndServe(":5100", nil))
 }
