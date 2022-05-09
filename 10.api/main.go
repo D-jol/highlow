@@ -5,16 +5,16 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"net/http"
 
 	"github.com/go-sql-driver/mysql"
 )
 
-func PhoneBook(w http.ResponseWriter, req *http.Request) {
+type Contact struct {
+	Name  string `json:"name"`
+	Phone string `json:"phone"`
+}
 
-	w.Header().Set("Content-Type", "text/html")
-
-	w.Write([]byte("<h1 color=blue>PhoneBook</h1"))
+func main() {
 
 	c := mysql.Config{
 		User:      "root",
@@ -43,6 +43,7 @@ func PhoneBook(w http.ResponseWriter, req *http.Request) {
 	}
 
 	phone_book := make(map[string]string) //made empty array of contact object - phone book
+	//contacts := []Contact{}
 
 	var running = true
 	var input int = 0
@@ -70,6 +71,7 @@ func PhoneBook(w http.ResponseWriter, req *http.Request) {
 			fmt.Println("Enter name and phone number: ")
 			fmt.Scanln(&name, &phone)
 			phone_book[name] = phone // for key name assign value of variable phone
+			//contacts = []Contact{Name: name, Phone: phone}
 			row := db.QueryRowContext(context.Background(), "INSERT INTO contacts (name, phone) VALUES(?, ?)", name, phone)
 			if err := row.Err(); err != nil {
 				fmt.Println("db.QueryRowContext", err)
@@ -111,6 +113,7 @@ func PhoneBook(w http.ResponseWriter, req *http.Request) {
 			}
 			if len(phone_book) == 0 {
 				fmt.Println("Contact list is empty. Add a contact with option 1.")
+				//running = false
 				continue // returns to the welcome page with notice to add contacts :D
 			}
 
@@ -119,10 +122,4 @@ func PhoneBook(w http.ResponseWriter, req *http.Request) {
 			continue
 		}
 	}
-}
-
-func main() {
-	http.HandleFunc("/phone", PhoneBook)
-
-	log.Fatal(http.ListenAndServe(":5100", nil))
 }

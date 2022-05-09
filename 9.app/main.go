@@ -37,12 +37,12 @@ func main() {
 		return
 	}
 
-	phone_book := make(map[string]string) //made empty array of contact object - phone book
+	phone_book := make(map[string]int) //made empty array of contact object - phone book
 
 	var running = true
 	var input int = 0
 	var name string
-	var phone string
+	var phone int
 
 	const (
 		ADD_CONTACT    = 1
@@ -71,7 +71,7 @@ func main() {
 				return
 			}
 		case input == REMOVE_CONTACT:
-			var del string
+			var del int
 			i := 1 // index number
 			for key, value := range phone_book {
 				fmt.Printf("%v. %v: %v\n", i, key, value)
