@@ -118,7 +118,7 @@ func main() {
 			}
 
 		default:
-			fmt.Println("Invalid input")
+			fmt.Println("Invalid input.")
 			continue
 		}
 	}
